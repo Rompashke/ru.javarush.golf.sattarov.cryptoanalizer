@@ -10,12 +10,12 @@ public class Cryptographer {
             'и', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ',
             'ъ', 'ы', 'ь', 'э', 'я', '.', ',', '«', '»', '"', '\'', ':', '!', '?', ' '};
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String strPath = scanner.nextLine();
         Path path = Path.of(strPath);
         createNewFile(path);
-    }
+    } */
     protected static Path createNewFile(Path path) { // вводим путь к файлу в котором
         // лежит файл с незакодированной информацией.
         boolean choice = true;
