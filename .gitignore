@@ -9,6 +9,7 @@
 *.info
 *.properties
 *.jar
+*.txt
 JavaRushTasks.zip
 /out/
 /JavaRushPlugin.properties
