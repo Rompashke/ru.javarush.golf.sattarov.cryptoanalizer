@@ -22,19 +22,22 @@ public class Cryptographer {
         Path parentPathOfFileWithText = Paths.get(path.getParent().toUri()); //берем путь до файла
         Path pathOfNewFile;
         Path createNewFile = null;
+        System.out.println("Введите название нового файла без расширения:");
         while (choice) {
-            System.out.println("Введите название нового файла без расширения:");
             Scanner scanner = new Scanner(System.in);
             String nameOfNewFile = scanner.nextLine(); // имя нового файла
-            String strPathOfNewFile = parentPathOfFileWithText + File.separator + nameOfNewFile + ".txt";
             // создаем новый путь к файлу
-            pathOfNewFile = Path.of(strPathOfNewFile); // делаем из строки путь к новому файлу
+            String strPathOfNewFile = parentPathOfFileWithText + File.separator + nameOfNewFile + ".txt";
+            // делаем из строки путь к новому файлу
+            pathOfNewFile = Path.of(strPathOfNewFile);
             if (Files.notExists(pathOfNewFile)) {
                 try {createNewFile = Files.createFile(pathOfNewFile);}
                 catch (IOException e) {
-                    System.out.println("Что-то пошло не так");
+                    System.out.println("При создании нового файла произошла ошибка");
                 }
                 choice = false;
+            } else {
+                System.out.println("Такой файл уже существует, введите название нового файла:");
             }
         }
         return createNewFile;
