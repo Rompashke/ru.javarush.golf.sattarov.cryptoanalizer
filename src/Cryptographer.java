@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,6 +40,33 @@ public class Cryptographer {
             }
         }
         return createNewFile;
+    }
+
+    public static void encrypt(String strPath , int key) {
+        // делаем из строки путь
+        Path pathOfTextFile = Path.of(strPath);
+        // проверяем существует ли такой файл (Файл с текстом для кодирования)
+        if (pathOfTextFile.isAbsolute() && Files.exists(pathOfTextFile)) {
+            // открываем доступ к файлам
+            try (FileReader inputChar = new FileReader(strPath);
+                 FileWriter outputChar = new FileWriter(createNewFile(pathOfTextFile).toString())) {
+                // создаем буфер с размером 64kB
+                char[] buffer = new char[65535];
+                // проверяем остались ли еще не считанные символы в потоке
+                while (inputChar.ready()) {
+                    // создаем переменную хранящую количество прочитанных символов и записываем в буфер данные
+                    int real = inputChar.read(buffer);
+
+                    // записываем данные из буфера в файл для зашифрованного текста
+                    outputChar.write(buffer, 0 , real);
+                }
+            } catch (FileNotFoundException exception) {
+                System.out.println("Ошибка наличия файла в блоке шифрования FileNotFoundException");
+            }
+            catch (IOException exception) {
+                System.out.println("Ошибка наличия файла в блоке шифрования IOException");
+            }
+        }
     }
 
 }
