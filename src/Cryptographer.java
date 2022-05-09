@@ -2,6 +2,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Cryptographer {
@@ -43,6 +44,7 @@ public class Cryptographer {
     }
 
     public static void encrypt(String strPath , int key) {
+        int keyNumber = key % ALPHABET.length;
         // делаем из строки путь
         Path pathOfTextFile = Path.of(strPath);
         // проверяем существует ли такой файл (Файл с текстом для кодирования)
@@ -56,9 +58,27 @@ public class Cryptographer {
                 while (inputChar.ready()) {
                     // создаем переменную хранящую количество прочитанных символов и записываем в буфер данные
                     int real = inputChar.read(buffer);
-
+                    // создаем массив для зашифрованного текста
+                    char[] encryptBuffer = new char[65535];
+                    // процесс зашировки текста в правую сторону
+                    for (int i = 0; i < real; i++) {
+                        // необходимо сделать проверку есть ли в алфавите такой символ.
+                        boolean symbolBelongsAlphabet = false;
+                        int indexOfSymbolInAlphabet = -1;
+                        for (int j = 0; j < ALPHABET.length; j++) {
+                            if (Character.toString(buffer[i]).equalsIgnoreCase(Character.toString(ALPHABET[j]))) {
+                                symbolBelongsAlphabet = true;
+                                indexOfSymbolInAlphabet = j;
+                            }
+                        }
+                        if (symbolBelongsAlphabet) {
+                            encryptBuffer[i] = ALPHABET[(indexOfSymbolInAlphabet + keyNumber) % ALPHABET.length];
+                        } else {
+                            encryptBuffer[i] = buffer[i];
+                        }
+                    }
                     // записываем данные из буфера в файл для зашифрованного текста
-                    outputChar.write(buffer, 0 , real);
+                    outputChar.write(encryptBuffer, 0 , real);
                 }
             } catch (FileNotFoundException exception) {
                 System.out.println("Ошибка наличия файла в блоке шифрования FileNotFoundException");
