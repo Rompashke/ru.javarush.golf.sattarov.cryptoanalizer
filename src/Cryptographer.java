@@ -2,7 +2,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Cryptographer {
@@ -10,20 +9,15 @@ public class Cryptographer {
             'и', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ',
             'ъ', 'ы', 'ь', 'э', 'я', '.', ',', '«', '»', '"', '\'', ':', '!', '?', ' '};
 
-/*    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String strPath = scanner.nextLine();
-        Path path = Path.of(strPath);
-        createNewFile(path);
-    } */
+
     protected static Path createNewFile(Path path) { // вводим путь к файлу в котором
         // лежит файл с незакодированной информацией.
         boolean choice = true;
         Path parentPathOfFileWithText = Paths.get(path.getParent().toUri()); //берем путь до файла
         Path pathOfNewFile;
         Path createNewFile = null;
-        System.out.println("Введите название нового файла без расширения:");
         while (choice) {
+            System.out.println("Введите название нового файла без расширения:");
             Scanner scanner = new Scanner(System.in);
             String nameOfNewFile = scanner.nextLine(); // имя нового файла
             // создаем новый путь к файлу
@@ -31,8 +25,9 @@ public class Cryptographer {
             // делаем из строки путь к новому файлу
             pathOfNewFile = Path.of(strPathOfNewFile);
             if (Files.notExists(pathOfNewFile)) {
-                try {createNewFile = Files.createFile(pathOfNewFile);}
-                catch (IOException e) {
+                try {
+                    createNewFile = Files.createFile(pathOfNewFile);
+                } catch (IOException e) {
                     System.out.println("При создании нового файла произошла ошибка");
                 }
                 choice = false;
@@ -43,7 +38,7 @@ public class Cryptographer {
         return createNewFile;
     }
 
-    public static void encrypt(String strPath , int key) {
+    public static void encrypt(String strPath, int key) {
         int keyNumber = key % ALPHABET.length;
         // делаем из строки путь
         Path pathOfTextFile = Path.of(strPath);
@@ -78,12 +73,12 @@ public class Cryptographer {
                         }
                     }
                     // записываем данные из буфера в файл для зашифрованного текста
-                    outputChar.write(encryptBuffer, 0 , real);
+                    outputChar.write(encryptBuffer, 0, real);
+                    System.out.println("Сообщение зашифровано!");
                 }
             } catch (FileNotFoundException exception) {
                 System.out.println("Ошибка наличия файла в блоке шифрования FileNotFoundException");
-            }
-            catch (IOException exception) {
+            } catch (IOException exception) {
                 System.out.println("Ошибка наличия файла в блоке шифрования IOException");
             }
         }
