@@ -66,6 +66,7 @@ public class Cryptographer {
                                 indexOfSymbolInAlphabet = j;
                             }
                         }
+                        // процесс шифрования
                         if (symbolBelongsAlphabet) {
                             encryptBuffer[i] = ALPHABET[(indexOfSymbolInAlphabet + keyNumber) % ALPHABET.length];
                         } else {
@@ -75,6 +76,60 @@ public class Cryptographer {
                     // записываем данные из буфера в файл для зашифрованного текста
                     outputChar.write(encryptBuffer, 0, real);
                     System.out.println("Сообщение зашифровано!");
+                }
+            } catch (FileNotFoundException exception) {
+                System.out.println("Ошибка наличия файла в блоке шифрования FileNotFoundException");
+            } catch (IOException exception) {
+                System.out.println("Ошибка наличия файла в блоке шифрования IOException");
+            }
+        }
+    }
+
+    public static void decrypt(String strPath, int key) {
+        int keyNumber = key % ALPHABET.length;
+        // делаем из строки путь
+        Path pathOfTextFile = Path.of(strPath);
+        // проверяем существует ли такой файл (Файл с текстом для кодирования)
+        if (pathOfTextFile.isAbsolute() && Files.exists(pathOfTextFile)) {
+            // открываем доступ к файлам
+            try (FileReader inputChar = new FileReader(strPath);
+                 FileWriter outputChar = new FileWriter(createNewFile(pathOfTextFile).toString())) {
+                // создаем буфер с размером 64kB
+                char[] buffer = new char[65535];
+                // проверяем остались ли еще не считанные символы в потоке
+                while (inputChar.ready()) {
+                    // создаем переменную хранящую количество прочитанных символов и записываем в буфер данные
+                    int real = inputChar.read(buffer);
+                    // создаем массив для зашифрованного текста
+                    char[] decryptBuffer = new char[65535];
+                    // процесс зашировки текста в правую сторону
+                    for (int i = 0; i < real; i++) {
+                        // необходимо сделать проверку есть ли в алфавите такой символ.
+                        boolean symbolBelongsAlphabet = false;
+                        int indexOfSymbolInAlphabet = -1;
+                        for (int j = 0; j < ALPHABET.length; j++) {
+                            if (Character.toString(buffer[i]).equalsIgnoreCase(Character.toString(ALPHABET[j]))) {
+                                symbolBelongsAlphabet = true;
+                                indexOfSymbolInAlphabet = j;
+                            }
+                        }
+                        // процесс дешифрования
+                        if (symbolBelongsAlphabet) {
+                            // если индекс символа в алфавите меньше значения ключа
+                            if (indexOfSymbolInAlphabet < keyNumber) {
+                                decryptBuffer[i] = ALPHABET[ALPHABET.length + indexOfSymbolInAlphabet - keyNumber];
+                                // если индекс символа в алфавите больше значения ключа
+                            } else {
+                                decryptBuffer[i] = ALPHABET[indexOfSymbolInAlphabet - keyNumber];
+                            }
+                            // если символа не существует в алфавите
+                        } else {
+                            decryptBuffer[i] = buffer[i];
+                        }
+                    }
+                    // записываем данные из буфера в файл для зашифрованного текста
+                    outputChar.write(decryptBuffer, 0, real);
+                    System.out.println("Сообщение расшифровано!");
                 }
             } catch (FileNotFoundException exception) {
                 System.out.println("Ошибка наличия файла в блоке шифрования FileNotFoundException");
