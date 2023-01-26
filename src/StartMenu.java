@@ -76,7 +76,7 @@ public class StartMenu {
                         Cryptographer.decrypt(pathOfEncryptText, keyOfDecrypt);
                         break;
                     case 3:
-                        // ссылка на метод криптоанализатора;
+                        // ссылка на метод криптоанализатора bruteforce;
                         break;
                     case 4:
                         value = false;
